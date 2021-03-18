@@ -100,7 +100,15 @@ maskNet = load_model(args["model"])
 
 # initialize the video stream and allow the camera sensor to warm up
 print("[INFO] starting video stream...")
-vs = VideoStream(src=0).start()
+codec = 0x47504A4D  # MJPG
+vs = VideoStream(src=0)
+# VideoStream -> VideoCaptureStream -> VideoCapture
+vs.stream.stream.set(cv2.CAP_PROP_FPS, 10)
+vs.stream.stream.set(cv2.CAP_PROP_FOURCC, codec)
+vs.stream.stream.set(cv2.CAP_PROP_FRAME_WIDTH, 800)
+vs.stream.stream.set(cv2.CAP_PROP_FRAME_HEIGHT, 600)
+vs = vs.start()
+# vs = cv2.VideoCapture(0)
 time.sleep(2.0)
 
 # loop over the frames from the video stream
@@ -138,7 +146,7 @@ while True:
 		# Alarm when "No Mask" detected
 		if mask < withoutMask:
 			path = os.path.abspath("Alarm.wav")
-			playsound(path)
+			# playsound(path)
 
 	# show the output frame
 	cv2.imshow("Frame", frame)
@@ -149,5 +157,5 @@ while True:
 		break
 
 # do a bit of cleanup
-cv2.destroyAllWindows()
 vs.stop()
+cv2.destroyAllWindows()

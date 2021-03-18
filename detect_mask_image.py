@@ -5,6 +5,9 @@
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
+import pickle
+import base64
+import requests
 import numpy as np
 import argparse
 import cv2
@@ -39,6 +42,9 @@ def mask_image():
 	# load the input image from disk, clone it, and grab the image spatial
 	# dimensions
 	image = cv2.imread(args["image"])
+	# f = pickle.dumps(image)
+	# r = requests.post('http://scooterlabs.com/echo', data={'im', f})
+	# print(r.text)
 	orig = image.copy()
 	(h, w) = image.shape[:2]
 
